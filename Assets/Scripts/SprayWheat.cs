@@ -7,6 +7,7 @@ public class SprayWheat : MonoBehaviour
 {
 
     private GameObject dirtPile;
+    private bool isDried = false; 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlantWheat"))
@@ -16,6 +17,7 @@ public class SprayWheat : MonoBehaviour
         if (other.CompareTag("DirtPile"))
         {
             dirtPile = other.gameObject;
+            DryLand();
         }
     }
 
@@ -27,8 +29,16 @@ public class SprayWheat : MonoBehaviour
             currentPlant.Spray(currentPlant.growthStage);
 
             if(currentPlant.growthStage > 1)
-            { StartCoroutine(DryTimer(dirtPile)); }
+            { isDried = true; }
         }
+    }
+    private void DryLand()
+    {
+        if (isDried)
+        {
+            StartCoroutine(DryTimer(dirtPile));
+        }
+
     }
     private IEnumerator DryTimer(GameObject _dirtPile)
     {
