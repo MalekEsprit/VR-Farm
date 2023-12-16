@@ -8,6 +8,7 @@ public class WheatSpawner : MonoBehaviour
     public List<GameObject> dirtPiles;
     public int minWheatCount = 5;
     public int maxWheatCount = 8;
+    private int CuttedWheatCount = 0;
 
 
     private List<GameObject> spawnedWheatObjects = new List<GameObject>();
@@ -27,17 +28,22 @@ public class WheatSpawner : MonoBehaviour
             }
         }
     }
-    public void ActivateAllWheatMarkers()
+    public void CheckForCuttedWheat(bool _state)
     {
         foreach (GameObject wheat in spawnedWheatObjects)
         {
             Transform marker = wheat.transform.GetChild(0); 
             if (marker != null)
             {
-                if(!wheat.CompareTag("CuttedWheat"))
-                { marker.gameObject.SetActive(true); }              
+                if (!wheat.CompareTag("CuttedWheat"))
+                {
+                    CuttedWheatCount++;
+                    marker.gameObject.SetActive(_state && CuttedWheatCount < 10);                
+                }
             }
+                
         }
+        CuttedWheatCount = 0;
     }
 
     void SpawnWheatInDirtPile(GameObject dirtPile)
